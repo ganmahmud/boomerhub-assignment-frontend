@@ -1,4 +1,4 @@
-import { Provider } from "@/lib/utils";
+import { Provider, constructEmbeddedMapUrl } from "@/lib/utils";
 import {
   Carousel,
   CarouselContent,
@@ -30,6 +30,7 @@ export default async function Page({ params }: any) {
     county,
     city,
     zipCode,
+    mapUrl,
     ProviderImage,
   }: Provider = await getProviderById(params.providerId);
 
@@ -57,29 +58,31 @@ export default async function Page({ params }: any) {
       </div>
 
       <section className="flex items-center justify-between">
-        <Carousel className="w-full max-w-lg">
-          <CarouselContent>
-            {ProviderImage.map((img, index) => (
-              <CarouselItem key={index}>
-                <Image
-                  className="object-cover h-full"
-                  placeholder={"empty"}
-                  width={512}
-                  height={512}
-                  src={`${process.env.S3_ENDPOINT}/${img.url}`}
-                  alt={`The Delaney at Georgetown Village Image ${index + 1}`}
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="bg-black text-white" />
-          <CarouselNext className="bg-black text-white" />
-        </Carousel>
+        {ProviderImage && ProviderImage.length > 0 && (
+          <Carousel className="w-full max-w-lg">
+            <CarouselContent>
+              {ProviderImage.map((img, index) => (
+                <CarouselItem key={index}>
+                  <Image
+                    className="object-cover h-full"
+                    placeholder={"empty"}
+                    width={512}
+                    height={512}
+                    src={`${process.env.S3_ENDPOINT}/${img.url}`}
+                    alt={`The Delaney at Georgetown Village Image ${index + 1}`}
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="bg-black text-white" />
+            <CarouselNext className="bg-black text-white" />
+          </Carousel>
+        )}
 
         <iframe
           width={600}
           height={365}
-          src="https://maps.google.com/maps?q=359+VILLAGE+COMMONS+BOULEVARD,+Georgetown,+TX+78633&t=&z=13&ie=UTF8&iwloc=&output=embed"
+          src={constructEmbeddedMapUrl(mapUrl)}
           aria-hidden="false"
         ></iframe>
       </section>

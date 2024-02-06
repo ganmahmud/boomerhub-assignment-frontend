@@ -29,3 +29,14 @@ export type Provider = {
     url: string;
   }[];
 };
+
+export function constructEmbeddedMapUrl(googleMapsUrl: string): string {
+  const placeIndex = googleMapsUrl.indexOf("place/");
+  if (placeIndex === -1) {
+    throw new Error("Invalid Google Maps URL");
+  }
+  const address = googleMapsUrl.substring(placeIndex + "place/".length);
+  return `https://maps.google.com/maps?q=${encodeURIComponent(
+    address
+  )}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+}
