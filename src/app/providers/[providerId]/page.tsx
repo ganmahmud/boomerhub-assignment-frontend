@@ -1,19 +1,20 @@
-import { Provider, constructEmbeddedMapUrl } from "@/lib/utils";
+import { Provider, constructEmbeddedMapUrl } from '@/lib/utils';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
-import Image from "next/image";
+} from '@/components/ui/carousel';
+import Image from 'next/image';
+import Breadcrumb from '@/components/ui/breadcrumb';
 
 async function getProviderById(providerId: string) {
-  const res = await fetch(`${process.env.API_ENDPOINT}/${providerId}`);
+  const res = await fetch(`${process.env.API_ENDPOINT}/provider/${providerId}`);
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch data");
+    throw new Error('Failed to fetch data');
   }
 
   return res.json();
@@ -36,6 +37,8 @@ export default async function Page({ params }: any) {
 
   return (
     <div>
+      <Breadcrumb currentPath="providers" contentName={name} />
+
       <h1 className="mb-5 text-4xl font-extrabold tracking-tight lg:text-5xl">
         {name}
       </h1>
@@ -65,7 +68,7 @@ export default async function Page({ params }: any) {
                 <CarouselItem key={index}>
                   <Image
                     className="object-cover h-full"
-                    placeholder={"empty"}
+                    placeholder={'empty'}
                     width={512}
                     height={512}
                     src={`${process.env.S3_ENDPOINT}/${img.url}`}

@@ -40,3 +40,25 @@ export function constructEmbeddedMapUrl(googleMapsUrl: string): string {
     address
   )}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
 }
+
+export function debounce<F extends (...args: Parameters<F>) => ReturnType<F>>(
+  fn: F,
+  wait = 100,
+  immediate = true
+): (...args: Parameters<F>) => void {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+
+  return function (...args: Parameters<F>) {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    if (immediate && !timeout) {
+      fn(...args);
+    }
+
+    timeout = setTimeout(() => {
+      fn(...args);
+    }, wait);
+  };
+}
